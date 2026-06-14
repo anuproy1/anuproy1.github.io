@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anup Kumar Roy Portfolio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav><h2 id="name"></h2></nav>
+
+<section class="hero">
+  <h1 id="title"></h1>
+  <p id="summary"></p>
+</section>
+
+<section>
+  <h2>Education</h2>
+  <div id="education"></div>
+</section>
+
+<section>
+  <h2>Skills</h2>
+  <ul id="skills"></ul>
+</section>
+
+<section>
+  <h2>Projects</h2>
+  <div id="projects"></div>
+</section>
+
+<section>
+  <h2>Publications</h2>
+  <div id="publications"></div>
+</section>
+
+<section>
+  <h2>Daily Learning Posts</h2>
+  <div id="posts"></div>
+</section>
+
+<script src="data.js"></script>
+<script src="posts.js"></script>
+<script>
+document.getElementById('name').textContent = profile.name;
+document.getElementById('title').textContent = profile.title;
+document.getElementById('summary').textContent = profile.summary;
+
+education.forEach(e=>{
+ document.getElementById('education').innerHTML += `<div class="card"><h3>${e.degree}</h3><p>${e.school}</p><p>${e.date}</p></div>`;
+});
+
+skills.forEach(s=>{
+ document.getElementById('skills').innerHTML += `<li>${s}</li>`;
+});
+
+projects.forEach(p=>{
+ document.getElementById('projects').innerHTML += `<div class="card"><h3>${p.title}</h3><p>${p.desc}</p><a href="${p.link}">GitHub</a></div>`;
+});
+
+publications.forEach(p=>{
+ document.getElementById('publications').innerHTML += `<div class="card">${p.title}</div>`;
+});
+
+posts.forEach(p=>{
+ document.getElementById('posts').innerHTML += `<div class="card"><h3>${p.title}</h3><p>${p.date}</p><p>${p.summary}</p><a href="${p.githubLink}">Read More</a></div>`;
+});
+</script>
+</body>
+</html>
