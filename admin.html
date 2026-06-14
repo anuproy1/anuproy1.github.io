@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Portfolio Content Manager</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <div>
+      <p class="eyebrow">Portfolio CMS</p>
+      <h1>Content Manager</h1>
+      <p>Edit the website content without changing HTML or CSS.</p>
+    </div>
+    <a class="secondary-button" href="index.html">View website</a>
+  </header>
+
+  <div class="toolbar" aria-label="Content actions">
+    <button id="openButton" type="button">Open content.json</button>
+    <button id="saveButton" type="button">Save JSON file</button>
+    <button id="downloadButton" type="button">Download JSON</button>
+    <button id="copyButton" type="button">Copy JSON</button>
+    <button id="previewButton" type="button">Preview changes</button>
+  </div>
+
+  <main class="admin-main">
+    <aside class="instructions">
+      <h2>Publishing workflow</h2>
+      <ol>
+        <li>Edit fields and add or reorder items.</li>
+        <li>Use Preview changes to check the website.</li>
+        <li>Save as <code>content.json</code> in this project.</li>
+        <li>Commit and push that one file to GitHub Pages.</li>
+      </ol>
+      <p>The public website reads this content automatically. No main page or stylesheet edits are needed.</p>
+      <p id="statusMessage" class="status" role="status">Loading content...</p>
+    </aside>
+
+    <section id="editor" class="editor" aria-label="Portfolio content editor"></section>
+  </main>
+
+  <script src="admin.js" defer></script>
+</body>
+</html>

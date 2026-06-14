@@ -1,0 +1,255 @@
+{
+  "site": {
+    "title": "Anup Kumar Roy | VLSI Portfolio",
+    "brand": "Anup Kumar Roy",
+    "footer": "(c) 2026 Anup Kumar Roy. Built with GitHub Pages.",
+    "defaultTheme": "light"
+  },
+  "hero": {
+    "id": "home",
+    "navLabel": "Home",
+    "avatarText": "AKR",
+    "name": "Anup Kumar Roy",
+    "location": "Beaumont, Texas, USA",
+    "headline": "VLSI / STA / Physical Design Enthusiast",
+    "affiliation": "Lamar University",
+    "summaryTitle": "Professional Summary",
+    "summary": "Graduate researcher in Electrical and Computer Engineering with interests in radiation effects and reliability in nanoscale CMOS circuits, FPGA-based hardware security systems, static timing analysis, physical design, AI hardware acceleration, and edge computing.",
+    "resumeLabel": "Download Resume",
+    "resumeUrl": "",
+    "socialLinks": [
+      {
+        "label": "Email",
+        "url": "mailto:aroy8@lamar.edu"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/YOUR-GITHUB-USERNAME"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/YOUR-LINKEDIN"
+      },
+      {
+        "label": "Scholar",
+        "url": "YOUR-GOOGLE-SCHOLAR-LINK"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "education",
+      "title": "Education",
+      "navLabel": "Education",
+      "layout": "cards",
+      "enabled": true,
+      "items": [
+        {
+          "title": "M.Eng.Sc. Electrical & Computer Engineering",
+          "subtitle": "Lamar University",
+          "period": "Jan 2023 - May 2026",
+          "description": "CGPA: 3.87/4.00",
+          "details": []
+        },
+        {
+          "title": "B.Sc. Electrical & Electronics Engineering",
+          "subtitle": "American International University-Bangladesh",
+          "period": "May 2013 - Dec 2017",
+          "description": "CGPA: 3.12/4.00",
+          "details": []
+        },
+        {
+          "title": "VLSI Physical Design & Verification Training",
+          "subtitle": "Maven Silicon",
+          "period": "Sep 2025 - Present",
+          "description": "ASIC PD, STA, DRC/LVS, Tcl, Python",
+          "details": []
+        }
+      ]
+    },
+    {
+      "id": "interests",
+      "title": "Interests",
+      "navLabel": "Interests",
+      "layout": "chips",
+      "enabled": true,
+      "items": [
+        "Radiation Effects",
+        "CMOS Reliability",
+        "FPGA Security",
+        "Static Timing Analysis",
+        "Physical Design",
+        "Edge Computing"
+      ]
+    },
+    {
+      "id": "research",
+      "title": "My Research",
+      "navLabel": "Research",
+      "layout": "text",
+      "enabled": true,
+      "paragraphs": [
+        "My thesis, Impact of Temperature on Radiation-Induced Delays, investigates temperature-dependent soft delay and single event crosstalk delay in 22 nm CMOS technology.",
+        "The work also evaluates forward body bias techniques for reliability enhancement using HSPICE simulations."
+      ]
+    },
+    {
+      "id": "publications",
+      "title": "Recent Publications",
+      "navLabel": "Publications",
+      "layout": "publications",
+      "enabled": true,
+      "items": [
+        {
+          "authors": "R. Islam, A. K. Roy, A. Ahsan, et al.",
+          "title": "IoT-based Smart Municipal Garbage Management System for Fertilizer Processing System",
+          "venue": "IEEE RAAICON",
+          "year": "2024",
+          "url": ""
+        },
+        {
+          "authors": "P. Paul, A. K. Roy, N. Bhowmike, et al.",
+          "title": "Design and Simulation of a Monofilar Helical Antenna for 5G and Beyond Applications",
+          "venue": "IEEE M&N",
+          "year": "2024",
+          "url": ""
+        },
+        {
+          "authors": "A. Ghosh, A. S. Zishan, M. Moumita, Y. A. Kumar, A. K. Roy, et al.",
+          "title": "Improving the Performance of AgCdF3-Based Perovskite Solar Cells Using Machine Learning-Driven Adjustment of Active Layer and Charge Transport Materials With SCAPS-1D",
+          "venue": "Inorganic Chemistry Communications",
+          "year": "",
+          "url": ""
+        },
+        {
+          "authors": "D. Roy, M. S. Reza, A. Ghosh, A. K. Roy, et al.",
+          "title": "Development and Modeling of Advanced Systems Na2SnBr6-Based Perovskite Solar Cells",
+          "venue": "Optics Express",
+          "year": "",
+          "url": ""
+        }
+      ]
+    },
+    {
+      "id": "experience",
+      "title": "Experience",
+      "navLabel": "Experience",
+      "layout": "cards",
+      "enabled": true,
+      "items": [
+        {
+          "title": "Maintenance Engineer",
+          "subtitle": "Dana Ltd., Banani, Dhaka, Bangladesh",
+          "period": "Oct 2021 - Dec 2022",
+          "description": "Maintained HVAC systems, diesel generators, UPS systems, and electrical substations.",
+          "details": [
+            "Performed preventive maintenance, troubleshooting, and reliability improvement activities."
+          ]
+        },
+        {
+          "title": "VLSI Training",
+          "subtitle": "Maven Silicon, Bangalore, India",
+          "period": "Sep 2025 - Present",
+          "description": "Digital electronics, Verilog HDL, and the complete ASIC physical design flow.",
+          "details": [
+            "Floorplanning, placement, CTS, routing, STA, DRC/LVS, Tcl, and Python."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "projects",
+      "title": "Featured Projects",
+      "navLabel": "Projects",
+      "layout": "projects",
+      "enabled": true,
+      "items": [
+        {
+          "visual": "HSPICE",
+          "category": "Research",
+          "title": "Impact of Temperature on Radiation-Induced Delays",
+          "summary": "22 nm CMOS reliability study on soft delay, SECD, temperature effects, and forward body bias mitigation.",
+          "linkLabel": "GitHub Link",
+          "url": "https://github.com/YOUR-GITHUB-USERNAME/temperature-radiation-delay-cmos"
+        },
+        {
+          "visual": "FPGA",
+          "category": "Hardware Security",
+          "title": "FPGA-Based CAN Bus Intrusion Detection System",
+          "summary": "Verilog/Vivado project for timing-based attack detection on FPGA systems.",
+          "linkLabel": "GitHub Link",
+          "url": "https://github.com/YOUR-GITHUB-USERNAME/fpga-security-projects"
+        },
+        {
+          "visual": "STA",
+          "category": "Learning Notes",
+          "title": "Static Timing Analysis Notes",
+          "summary": "Setup, hold, recovery/removal, clock uncertainty, input slew, output load, and timing closure notes.",
+          "linkLabel": "GitHub Link",
+          "url": "https://github.com/YOUR-GITHUB-USERNAME/static-timing-analysis-notes"
+        },
+        {
+          "visual": "AGROBOT",
+          "category": "Embedded",
+          "title": "Multipurpose AGROBOT",
+          "summary": "Solar-powered agricultural robot using Arduino IDE, Proteus, SketchUp, and Bluetooth control.",
+          "linkLabel": "GitHub Link",
+          "url": "https://github.com/YOUR-GITHUB-USERNAME/agrobot"
+        }
+      ]
+    },
+    {
+      "id": "posts",
+      "title": "Daily GitHub Posts",
+      "navLabel": "Daily Posts",
+      "layout": "posts",
+      "enabled": true,
+      "description": "Add, remove, or reorder daily posts from the content manager.",
+      "items": [
+        {
+          "title": "Day 1: Setup and Hold Timing Notes",
+          "date": "2026-06-14",
+          "category": "STA",
+          "summary": "Short note about setup time, hold time, WNS, and TNS for beginner VLSI learners.",
+          "linkLabel": "Read on GitHub",
+          "url": "https://github.com/YOUR-GITHUB-USERNAME/static-timing-analysis-notes"
+        },
+        {
+          "title": "Day 2: HSPICE Inverter Delay Simulation",
+          "date": "2026-06-15",
+          "category": "HSPICE",
+          "summary": "Daily simulation post showing CMOS inverter propagation delay and output waveform.",
+          "linkLabel": "Read on GitHub",
+          "url": "https://github.com/YOUR-GITHUB-USERNAME/hspice-vlsi-lab"
+        },
+        {
+          "title": "Day 3: FPGA CAN IDS Progress",
+          "date": "2026-06-16",
+          "category": "FPGA",
+          "summary": "Progress update for FPGA-based CAN bus intrusion detection project using Verilog and Vivado.",
+          "linkLabel": "Read on GitHub",
+          "url": "https://github.com/YOUR-GITHUB-USERNAME/fpga-security-projects"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "navLabel": "Contact",
+      "layout": "contact",
+      "enabled": true,
+      "items": [
+        {
+          "label": "Email",
+          "value": "aroy8@lamar.edu",
+          "url": "mailto:aroy8@lamar.edu"
+        },
+        {
+          "label": "Location",
+          "value": "Beaumont, Texas, USA",
+          "url": ""
+        }
+      ]
+    }
+  ]
+}
