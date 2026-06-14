@@ -333,9 +333,9 @@ function newArrayItem(path, array) {
 function blankItemForLayout(layout) {
   const templates = {
     cards: { title: '', subtitle: '', period: '', description: '', details: [] },
-    publications: { authors: '', title: '', venue: '', year: '', url: '' },
-    projects: { visual: 'PROJECT', category: '', title: '', summary: '', linkLabel: 'View project', url: '' },
-    posts: { title: '', date: '', category: '', summary: '', linkLabel: 'Read more', url: '' },
+    publications: { imageUrl: '', category: '', authors: '', title: '', summary: '', venue: '', year: '', readTime: '', url: '' },
+    projects: { imageUrl: '', visual: 'PROJECT', category: '', title: '', summary: '', linkLabel: 'View project', url: '' },
+    posts: { imageUrl: '', title: '', date: '', category: '', summary: '', readTime: '', linkLabel: 'Read more', url: '' },
     contact: { label: '', value: '', url: '' },
     chips: ''
   };
@@ -494,7 +494,7 @@ function isLongField(key) {
 }
 
 function isWideField(key) {
-  return isLongField(key) || ['headline', 'title', 'subtitle', 'url', 'resumeUrl'].includes(key);
+  return isLongField(key) || ['headline', 'title', 'subtitle', 'url', 'resumeUrl', 'imageUrl'].includes(key);
 }
 
 function jsonText() {

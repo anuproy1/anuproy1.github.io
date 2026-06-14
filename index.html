@@ -12,8 +12,22 @@
     <a id="brand" class="brand" href="#home">Portfolio</a>
     <button id="menuToggle" class="menu-btn" type="button" aria-expanded="false" aria-controls="siteNav">Menu</button>
     <nav id="siteNav" aria-label="Main navigation"></nav>
-    <button id="themeToggle" class="theme-btn" type="button" aria-label="Switch color theme">Dark</button>
+    <div class="header-actions">
+      <button id="searchToggle" class="icon-btn" type="button" aria-label="Search portfolio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+      </button>
+      <button id="themeToggle" class="theme-btn" type="button" aria-label="Switch color theme">Theme</button>
+    </div>
   </header>
+
+  <div id="searchPanel" class="search-panel" hidden>
+    <label for="siteSearch">Search this portfolio</label>
+    <div class="search-row">
+      <input id="siteSearch" type="search" placeholder="Research, projects, publications...">
+      <button id="searchClose" type="button">Close</button>
+    </div>
+    <div id="searchResults" class="search-results" aria-live="polite"></div>
+  </div>
 
   <main id="siteContent">
     <div class="loading-state">Loading portfolio...</div>

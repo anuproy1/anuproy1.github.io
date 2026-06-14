@@ -4,6 +4,11 @@ const siteNav = document.getElementById('siteNav');
 const siteFooter = document.getElementById('siteFooter');
 const themeToggle = document.getElementById('themeToggle');
 const menuToggle = document.getElementById('menuToggle');
+const searchToggle = document.getElementById('searchToggle');
+const searchPanel = document.getElementById('searchPanel');
+const searchInput = document.getElementById('siteSearch');
+const searchClose = document.getElementById('searchClose');
+const searchResults = document.getElementById('searchResults');
 
 const layoutRenderers = {
   text: renderTextSection,
@@ -23,6 +28,7 @@ async function init() {
     renderSite(data);
     setupTheme(data.site?.defaultTheme || 'light');
     setupMenu();
+    setupSearch(data);
   } catch (error) {
     console.error(error);
     contentRoot.innerHTML = `
@@ -39,14 +45,10 @@ async function loadContent() {
     ? localStorage.getItem('portfolioPreviewContent')
     : null;
 
-  if (previewData) {
-    return JSON.parse(previewData);
-  }
+  if (previewData) return JSON.parse(previewData);
 
   const response = await fetch('content.json', { cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error(`Unable to load content.json: ${response.status}`);
-  }
+  if (!response.ok) throw new Error(`Unable to load content.json: ${response.status}`);
   return response.json();
 }
 
@@ -54,6 +56,9 @@ function renderSite(data) {
   const site = data.site || {};
   const hero = data.hero || {};
   const sections = Array.isArray(data.sections) ? data.sections.filter(section => section.enabled !== false) : [];
+  const featuredIds = new Set(Array.isArray(site.heroSectionIds) ? site.heroSectionIds : []);
+  const heroSections = sections.filter(section => featuredIds.has(section.id));
+  const mainSections = sections.filter(section => !featuredIds.has(section.id));
 
   document.title = site.title || 'Portfolio';
   brand.textContent = site.brand || hero.name || 'Portfolio';
@@ -61,19 +66,14 @@ function renderSite(data) {
   siteFooter.textContent = site.footer || '';
 
   renderNavigation(hero, sections);
-  contentRoot.replaceChildren(renderHero(hero), ...sections.map(renderSection));
+  contentRoot.replaceChildren(renderHero(hero, heroSections), ...mainSections.map(renderSection));
 }
 
 function renderNavigation(hero, sections) {
   const links = [];
-  if (hero.navLabel) {
-    links.push({ id: hero.id || 'home', label: hero.navLabel });
-  }
-
+  if (hero.navLabel) links.push({ id: hero.id || 'home', label: hero.navLabel });
   sections.forEach(section => {
-    if (section.navLabel) {
-      links.push({ id: section.id, label: section.navLabel });
-    }
+    if (section.navLabel) links.push({ id: section.id, label: section.navLabel });
   });
 
   siteNav.innerHTML = links.map(link => `
@@ -81,26 +81,44 @@ function renderNavigation(hero, sections) {
   `).join('');
 }
 
-function renderHero(hero) {
+function renderHero(hero, featuredSections) {
   const section = createElement('section', 'hero');
   section.id = safeId(hero.id || 'home');
   section.innerHTML = `
-    <div class="profile-card reveal">
-      <div class="avatar" aria-label="Profile initials">${escapeHtml(hero.avatarText || initials(hero.name))}</div>
+    <div class="profile-card">
+      ${renderAvatar(hero)}
       <h1>${escapeHtml(hero.name || '')}</h1>
-      ${hero.location ? `<p class="pronoun">${escapeHtml(hero.location)}</p>` : ''}
+      ${hero.pronouns ? `<p class="pronouns">${escapeHtml(hero.pronouns)}</p>` : ''}
       ${hero.headline ? `<h2>${escapeHtml(hero.headline)}</h2>` : ''}
-      ${hero.affiliation ? `<p>${escapeHtml(hero.affiliation)}</p>` : ''}
+      ${hero.affiliation ? `<p class="affiliation">${escapeHtml(hero.affiliation)}</p>` : ''}
+      ${hero.location ? `<p class="location">${escapeHtml(hero.location)}</p>` : ''}
       <div class="socials">${renderLinkList(hero.socialLinks)}</div>
     </div>
-    <div class="summary reveal">
-      <p class="eyebrow">About</p>
-      <h2>${escapeHtml(hero.summaryTitle || 'Professional Summary')}</h2>
-      <p>${escapeHtml(hero.summary || '')}</p>
-      ${hero.resumeUrl ? renderButtonLink(hero.resumeUrl, hero.resumeLabel || 'Download Resume') : ''}
+    <div class="hero-content">
+      <div class="summary">
+        ${renderTitleRow(hero.summaryTitle || 'Professional Summary', 'summary')}
+        <p>${escapeHtml(hero.summary || '')}</p>
+        ${hero.resumeUrl ? renderButtonLink(hero.resumeUrl, hero.resumeLabel || 'Download Resume') : ''}
+      </div>
+      <div class="hero-features"></div>
     </div>
   `;
+
+  const featureRoot = section.querySelector('.hero-features');
+  featuredSections.forEach(feature => {
+    const block = createElement('section', `hero-feature hero-feature-${safeClass(feature.layout)}`);
+    block.id = safeId(feature.id);
+    block.append(createTitleRow(feature.title, feature.id || feature.layout), layoutRenderers[feature.layout]?.(feature) || renderTextSection(feature));
+    featureRoot.append(block);
+  });
   return section;
+}
+
+function renderAvatar(hero) {
+  if (hero.imageUrl) {
+    return `<div class="avatar"><img src="${safeUrl(hero.imageUrl)}" alt="${escapeAttribute(hero.name || 'Profile portrait')}"></div>`;
+  }
+  return `<div class="avatar avatar-fallback" aria-label="Profile initials">${escapeHtml(hero.avatarText || initials(hero.name))}</div>`;
 }
 
 function renderSection(sectionData) {
@@ -111,10 +129,9 @@ function renderSection(sectionData) {
   const header = createElement('div', 'section-heading');
   header.innerHTML = `
     ${sectionData.kicker ? `<p class="eyebrow">${escapeHtml(sectionData.kicker)}</p>` : ''}
-    <h2>${escapeHtml(sectionData.title || 'Untitled Section')}</h2>
+    ${renderTitleRow(sectionData.title || 'Untitled Section', sectionData.id || sectionData.layout)}
     ${sectionData.description ? `<p>${escapeHtml(sectionData.description)}</p>` : ''}
   `;
-
   section.append(header, renderer(sectionData));
   return section;
 }
@@ -136,35 +153,47 @@ function renderCardsSection(section) {
   const wrapper = createElement('div', 'cards');
   wrapper.innerHTML = getItems(section).map(item => `
     <article class="mini-card">
-      <h3>${escapeHtml(item.title || '')}</h3>
-      ${item.subtitle ? `<p class="card-subtitle">${escapeHtml(item.subtitle)}</p>` : ''}
-      ${item.period ? `<p class="card-period">${escapeHtml(item.period)}</p>` : ''}
-      ${item.description ? `<p>${escapeHtml(item.description)}</p>` : ''}
-      ${renderBulletList(item.details)}
-      ${item.url ? renderTextLink(item.url, item.linkLabel || 'Learn more') : ''}
+      <span class="card-icon" aria-hidden="true">${sectionIcon(section.id || 'cards')}</span>
+      <div class="mini-card-content">
+        <h3>${escapeHtml(item.title || '')}</h3>
+        ${item.period ? `<p class="card-period">${escapeHtml(item.period)}</p>` : ''}
+        ${item.subtitle ? `<p class="card-subtitle">${escapeHtml(item.subtitle)}</p>` : ''}
+        ${item.description ? `<p>${escapeHtml(item.description)}</p>` : ''}
+        ${renderBulletList(item.details)}
+        ${item.url ? renderTextLink(item.url, item.linkLabel || 'Learn more') : ''}
+      </div>
     </article>
   `).join('');
   return wrapper;
 }
 
 function renderPublicationsSection(section) {
-  const wrapper = createElement('div', 'paper-list');
-  wrapper.innerHTML = getItems(section).map(item => `
-    <article class="publication-card">
-      <p class="publication-authors">${escapeHtml(item.authors || '')}</p>
-      <h3>${item.url ? `<a href="${safeUrl(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title || '')}</a>` : escapeHtml(item.title || '')}</h3>
-      <p>${escapeHtml([item.venue, item.year].filter(Boolean).join(', '))}</p>
+  const wrapper = createElement('div', 'paper-list editorial-grid');
+  wrapper.innerHTML = getItems(section).map((item, index) => `
+    <article class="editorial-card publication-card">
+      ${renderMedia(item, item.category || item.venue || 'Publication', index)}
+      <div class="editorial-body">
+        ${item.category ? `<span class="tag">${escapeHtml(item.category)}</span>` : ''}
+        <h3>${escapeHtml(item.title || '')}</h3>
+        ${item.summary ? `<p>${escapeHtml(item.summary)}</p>` : ''}
+        <div class="card-meta">
+          <span>${escapeHtml(item.authors || '')}</span>
+          <span>${escapeHtml([item.venue, item.year].filter(Boolean).join(', '))}</span>
+          ${item.readTime ? `<span>${escapeHtml(item.readTime)}</span>` : ''}
+        </div>
+        ${item.url ? renderTextLink(item.url, 'Read more') : ''}
+      </div>
     </article>
   `).join('');
   return wrapper;
 }
 
 function renderProjectsSection(section) {
-  const wrapper = createElement('div', 'project-grid');
-  wrapper.innerHTML = getItems(section).map(item => `
-    <article class="project-card">
-      <div class="project-img">${escapeHtml(item.visual || 'Project')}</div>
-      <div class="project-body">
+  const wrapper = createElement('div', 'project-grid editorial-grid');
+  wrapper.innerHTML = getItems(section).map((item, index) => `
+    <article class="editorial-card project-card">
+      ${renderMedia(item, item.visual || 'Project', index)}
+      <div class="editorial-body">
         ${item.category ? `<span class="tag">${escapeHtml(item.category)}</span>` : ''}
         <h3>${escapeHtml(item.title || '')}</h3>
         <p>${escapeHtml(item.summary || '')}</p>
@@ -177,16 +206,29 @@ function renderProjectsSection(section) {
 
 function renderPostsSection(section) {
   const wrapper = createElement('div', 'post-grid');
-  wrapper.innerHTML = getItems(section).map(item => `
-    <article class="post-card">
-      ${item.category ? `<span class="tag">${escapeHtml(item.category)}</span>` : ''}
-      <h3>${escapeHtml(item.title || '')}</h3>
-      ${item.date ? `<p class="post-date">${escapeHtml(item.date)}</p>` : ''}
-      <p>${escapeHtml(item.summary || '')}</p>
-      ${item.url ? renderTextLink(item.url, item.linkLabel || 'Read more') : ''}
+  wrapper.innerHTML = getItems(section).map((item, index) => `
+    <article class="editorial-card post-card">
+      ${renderMedia(item, item.category || 'Post', index)}
+      <div class="editorial-body">
+        ${item.category ? `<span class="tag">${escapeHtml(item.category)}</span>` : ''}
+        <h3>${escapeHtml(item.title || '')}</h3>
+        <p>${escapeHtml(item.summary || '')}</p>
+        <div class="card-meta">
+          <span>${escapeHtml(item.date || '')}</span>
+          ${item.readTime ? `<span>${escapeHtml(item.readTime)}</span>` : ''}
+        </div>
+        ${item.url ? renderTextLink(item.url, item.linkLabel || 'Read more') : ''}
+      </div>
     </article>
   `).join('');
   return wrapper;
+}
+
+function renderMedia(item, fallback, index) {
+  if (item.imageUrl) {
+    return `<div class="editorial-media"><img src="${safeUrl(item.imageUrl)}" alt="${escapeAttribute(item.title || fallback)}" loading="lazy"></div>`;
+  }
+  return `<div class="editorial-media media-placeholder media-tone-${index % 4}"><span>${escapeHtml(fallback)}</span></div>`;
 }
 
 function renderContactSection(section) {
@@ -205,7 +247,9 @@ function renderContactSection(section) {
 function renderLinkList(links) {
   if (!Array.isArray(links)) return '';
   return links.filter(link => link.label && link.url).map(link => `
-    <a href="${safeUrl(link.url)}"${externalAttributes(link.url)}>${escapeHtml(link.label)}</a>
+    <a href="${safeUrl(link.url)}"${externalAttributes(link.url)} aria-label="${escapeAttribute(link.label)}" title="${escapeAttribute(link.label)}">
+      ${escapeHtml(socialMark(link.label))}
+    </a>
   `).join('');
 }
 
@@ -222,20 +266,70 @@ function renderBulletList(items) {
   return `<ul>${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
 }
 
-function getItems(section) {
-  return Array.isArray(section.items) ? section.items : [];
+function renderTitleRow(title, iconKey) {
+  return `<div class="title-row"><span class="section-icon" aria-hidden="true">${sectionIcon(iconKey)}</span><h2>${escapeHtml(title)}</h2></div>`;
 }
 
-function createElement(tag, className) {
-  const element = document.createElement(tag);
-  if (className) element.className = className;
-  return element;
+function createTitleRow(title, iconKey) {
+  const wrapper = createElement('div', 'title-row');
+  wrapper.innerHTML = `<span class="section-icon" aria-hidden="true">${sectionIcon(iconKey)}</span><h2>${escapeHtml(title)}</h2>`;
+  return wrapper;
+}
+
+function sectionIcon(key = '') {
+  const normalized = String(key).toLowerCase();
+  if (normalized.includes('education')) return '<svg viewBox="0 0 24 24"><path d="m3 9 9-5 9 5-9 5-9-5Z"></path><path d="M7 12v4c3 2 7 2 10 0v-4"></path></svg>';
+  if (normalized.includes('interest')) return '<svg viewBox="0 0 24 24"><path d="m12 2 1.2 4.2L17 8l-3.8 1.8L12 14l-1.2-4.2L7 8l3.8-1.8L12 2Z"></path><path d="m19 14 .8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14Z"></path></svg>';
+  if (normalized.includes('research') || normalized.includes('publication')) return '<svg viewBox="0 0 24 24"><path d="M6 4h12v16H6z"></path><path d="M9 8h6M9 12h6M9 16h4"></path></svg>';
+  if (normalized.includes('experience')) return '<svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V4h8v3M3 12h18"></path></svg>';
+  if (normalized.includes('project')) return '<svg viewBox="0 0 24 24"><path d="M4 5h7l2 2h7v12H4z"></path><path d="m9 15 2-2-2-2M13 15h3"></path></svg>';
+  if (normalized.includes('post')) return '<svg viewBox="0 0 24 24"><path d="M5 3h14v18H5z"></path><path d="M8 7h8M8 11h8M8 15h5"></path></svg>';
+  if (normalized.includes('contact')) return '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg>';
+  return '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="M7 15h10M14 9h3M14 12h3"></path></svg>';
+}
+
+function setupSearch(data) {
+  const records = buildSearchRecords(data);
+  searchToggle.addEventListener('click', () => {
+    searchPanel.hidden = !searchPanel.hidden;
+    if (!searchPanel.hidden) searchInput.focus();
+  });
+  searchClose.addEventListener('click', closeSearch);
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim().toLowerCase();
+    if (!query) {
+      searchResults.replaceChildren();
+      return;
+    }
+    const matches = records.filter(record => record.text.includes(query)).slice(0, 8);
+    searchResults.innerHTML = matches.length
+      ? matches.map(record => `<a href="#${safeId(record.id)}">${escapeHtml(record.title)}</a>`).join('')
+      : '<p>No matching section found.</p>';
+  });
+  searchResults.addEventListener('click', event => {
+    if (event.target.matches('a')) closeSearch();
+  });
+}
+
+function buildSearchRecords(data) {
+  const hero = data.hero || {};
+  const records = [{ id: hero.id || 'home', title: hero.name || 'Home', text: JSON.stringify(hero).toLowerCase() }];
+  (data.sections || []).forEach(section => records.push({
+    id: section.id,
+    title: section.title,
+    text: JSON.stringify(section).toLowerCase()
+  }));
+  return records;
+}
+
+function closeSearch() {
+  searchPanel.hidden = true;
+  searchInput.value = '';
+  searchResults.replaceChildren();
 }
 
 function setupTheme(defaultTheme) {
-  const storedTheme = localStorage.getItem('portfolioTheme');
-  applyTheme(storedTheme || defaultTheme);
-
+  applyTheme(localStorage.getItem('portfolioTheme') || defaultTheme);
   themeToggle.addEventListener('click', () => {
     const nextTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
     localStorage.setItem('portfolioTheme', nextTheme);
@@ -246,7 +340,7 @@ function setupTheme(defaultTheme) {
 function applyTheme(theme) {
   const dark = theme === 'dark';
   document.body.classList.toggle('dark', dark);
-  themeToggle.textContent = dark ? 'Light' : 'Dark';
+  themeToggle.textContent = dark ? 'Light' : 'Theme';
 }
 
 function setupMenu() {
@@ -254,7 +348,6 @@ function setupMenu() {
     const open = siteNav.classList.toggle('open');
     menuToggle.setAttribute('aria-expanded', String(open));
   });
-
   siteNav.addEventListener('click', event => {
     if (event.target.matches('a')) {
       siteNav.classList.remove('open');
@@ -263,8 +356,23 @@ function setupMenu() {
   });
 }
 
+function getItems(section) {
+  return Array.isArray(section.items) ? section.items : [];
+}
+
+function createElement(tag, className) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  return element;
+}
+
 function initials(name = '') {
   return name.split(/\s+/).filter(Boolean).slice(0, 3).map(part => part[0]).join('').toUpperCase();
+}
+
+function socialMark(label = '') {
+  const marks = { Email: '@', GitHub: 'GH', LinkedIn: 'in', Scholar: 'GS' };
+  return marks[label] || label.slice(0, 2);
 }
 
 function safeId(value = '') {
@@ -277,9 +385,7 @@ function safeClass(value = '') {
 
 function safeUrl(value = '') {
   const url = String(value).trim();
-  if (/^(https?:|mailto:|tel:)/i.test(url) || /^[./#]/.test(url) || /^[\w-]+\//.test(url)) {
-    return escapeAttribute(url);
-  }
+  if (/^(https?:|mailto:|tel:)/i.test(url) || /^[./#]/.test(url) || /^[\w-]+\//.test(url)) return escapeAttribute(url);
   return '#';
 }
 

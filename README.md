@@ -16,6 +16,16 @@ The content manager does not need a database. Because GitHub Pages is a static h
 
 The resume button appears whenever `hero.resumeUrl` contains a valid file path or web URL.
 
+## Add profile and card images
+
+The visual editor now includes `Image URL` fields for the profile, publications, projects, and posts.
+
+- Put an image in the `assets` folder and enter a path such as `assets/profile.jpg`.
+- You can also enter a complete `https://` image URL.
+- Leave the field empty to use the built-in VLSI-themed gradient artwork.
+
+The `heroSectionIds` site setting controls which dynamic sections appear beside the profile at the top. It currently contains `education` and `interests`.
+
 ## Run locally
 
 Opening `index.html` directly as a `file://` URL can block JSON loading. Use the VS Code **Live Server** extension, GitHub Pages, or a local server. If Python is installed, run:
@@ -36,7 +46,7 @@ Then open:
 - `cards`: repeatable education, experience, certification, or award cards.
 - `publications`: authors, paper title, venue, year, and optional link.
 - `projects`: visual label, category, title, summary, and project link.
-- `posts`: dated updates with category, summary, and link.
+- `posts`: dated updates with an optional image, category, summary, reading time, and link.
 - `contact`: labeled contact details and optional links.
 
 Use **Add a new section** in `admin.html` to create any of these layouts. Navigation links are generated from each enabled section's `navLabel`.

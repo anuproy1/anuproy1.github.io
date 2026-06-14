@@ -3,13 +3,19 @@
     "title": "Anup Kumar Roy | VLSI Portfolio",
     "brand": "Anup Kumar Roy",
     "footer": "(c) 2026 Anup Kumar Roy. Built with GitHub Pages.",
-    "defaultTheme": "light"
+    "defaultTheme": "light",
+    "heroSectionIds": [
+      "education",
+      "interests"
+    ]
   },
   "hero": {
     "id": "home",
     "navLabel": "Home",
     "avatarText": "AKR",
+    "imageUrl": "",
     "name": "Anup Kumar Roy",
+    "pronouns": "",
     "location": "Beaumont, Texas, USA",
     "headline": "VLSI / STA / Physical Design Enthusiast",
     "affiliation": "Lamar University",
@@ -101,31 +107,47 @@
       "enabled": true,
       "items": [
         {
+          "imageUrl": "",
+          "category": "IEEE Conference",
           "authors": "R. Islam, A. K. Roy, A. Ahsan, et al.",
           "title": "IoT-based Smart Municipal Garbage Management System for Fertilizer Processing System",
+          "summary": "IoT-enabled municipal waste collection and fertilizer processing research.",
           "venue": "IEEE RAAICON",
           "year": "2024",
+          "readTime": "Publication",
           "url": ""
         },
         {
+          "imageUrl": "",
+          "category": "Antenna Design",
           "authors": "P. Paul, A. K. Roy, N. Bhowmike, et al.",
           "title": "Design and Simulation of a Monofilar Helical Antenna for 5G and Beyond Applications",
+          "summary": "Design and simulation study for next-generation wireless communication systems.",
           "venue": "IEEE M&N",
           "year": "2024",
+          "readTime": "Publication",
           "url": ""
         },
         {
+          "imageUrl": "",
+          "category": "Machine Learning",
           "authors": "A. Ghosh, A. S. Zishan, M. Moumita, Y. A. Kumar, A. K. Roy, et al.",
           "title": "Improving the Performance of AgCdF3-Based Perovskite Solar Cells Using Machine Learning-Driven Adjustment of Active Layer and Charge Transport Materials With SCAPS-1D",
+          "summary": "Machine learning-guided optimization of active and charge transport layers.",
           "venue": "Inorganic Chemistry Communications",
           "year": "",
+          "readTime": "Journal article",
           "url": ""
         },
         {
+          "imageUrl": "",
+          "category": "Solar Cells",
           "authors": "D. Roy, M. S. Reza, A. Ghosh, A. K. Roy, et al.",
           "title": "Development and Modeling of Advanced Systems Na2SnBr6-Based Perovskite Solar Cells",
+          "summary": "Development and device modeling of an advanced perovskite solar-cell system.",
           "venue": "Optics Express",
           "year": "",
+          "readTime": "Journal article",
           "url": ""
         }
       ]
@@ -165,6 +187,7 @@
       "enabled": true,
       "items": [
         {
+          "imageUrl": "",
           "visual": "HSPICE",
           "category": "Research",
           "title": "Impact of Temperature on Radiation-Induced Delays",
@@ -173,6 +196,7 @@
           "url": "https://github.com/YOUR-GITHUB-USERNAME/temperature-radiation-delay-cmos"
         },
         {
+          "imageUrl": "",
           "visual": "FPGA",
           "category": "Hardware Security",
           "title": "FPGA-Based CAN Bus Intrusion Detection System",
@@ -181,6 +205,7 @@
           "url": "https://github.com/YOUR-GITHUB-USERNAME/fpga-security-projects"
         },
         {
+          "imageUrl": "",
           "visual": "STA",
           "category": "Learning Notes",
           "title": "Static Timing Analysis Notes",
@@ -189,6 +214,7 @@
           "url": "https://github.com/YOUR-GITHUB-USERNAME/static-timing-analysis-notes"
         },
         {
+          "imageUrl": "",
           "visual": "AGROBOT",
           "category": "Embedded",
           "title": "Multipurpose AGROBOT",
@@ -207,26 +233,32 @@
       "description": "Add, remove, or reorder daily posts from the content manager.",
       "items": [
         {
+          "imageUrl": "",
           "title": "Day 1: Setup and Hold Timing Notes",
           "date": "2026-06-14",
           "category": "STA",
           "summary": "Short note about setup time, hold time, WNS, and TNS for beginner VLSI learners.",
+          "readTime": "2 min read",
           "linkLabel": "Read on GitHub",
           "url": "https://github.com/YOUR-GITHUB-USERNAME/static-timing-analysis-notes"
         },
         {
+          "imageUrl": "",
           "title": "Day 2: HSPICE Inverter Delay Simulation",
           "date": "2026-06-15",
           "category": "HSPICE",
           "summary": "Daily simulation post showing CMOS inverter propagation delay and output waveform.",
+          "readTime": "2 min read",
           "linkLabel": "Read on GitHub",
           "url": "https://github.com/YOUR-GITHUB-USERNAME/hspice-vlsi-lab"
         },
         {
+          "imageUrl": "",
           "title": "Day 3: FPGA CAN IDS Progress",
           "date": "2026-06-16",
           "category": "FPGA",
           "summary": "Progress update for FPGA-based CAN bus intrusion detection project using Verilog and Vivado.",
+          "readTime": "2 min read",
           "linkLabel": "Read on GitHub",
           "url": "https://github.com/YOUR-GITHUB-USERNAME/fpga-security-projects"
         }
